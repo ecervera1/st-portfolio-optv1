@@ -1,14 +1,9 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-import yfinance as yf  # Import yfinance for fetching data
+import yfinance as yf
 from datetime import datetime
 import matplotlib.pyplot as plt
-from pypfopt.efficient_frontier import EfficientFrontier
-from pypfopt import risk_models
-from pypfopt import expected_returns
-from scipy import stats
-import seaborn as sns
 
 # Set style for plots
 plt.style.use('fivethirtyeight')
@@ -58,6 +53,54 @@ if st.sidebar.button('Run Optimization'):
             st.write('Expected annual return: {:.2f}%'.format(perf[0]*100))
             st.write('Annual volatility: {:.2f}%'.format(perf[1]*100))
             st.write('Sharpe Ratio: {:.2f}'.format(perf[2]))
+
+            # Financial Statement Analysis Section
+            st.sidebar.header('Financial Statement Analysis')
+
+            # Function to fetch financial data for a stock
+            def fetch_financial_data(ticker):
+                financials = yf.Ticker(ticker).financials
+                return financials
+
+            # Function to plot financial statements as tables
+            def plot_financial_statements(financial_data):
+                # Create a container for the financial statements
+                st.subheader('Financial Statements')
+
+                # Display Income Statement as a table
+                st.write('Income Statement')
+                income_statement = financial_data.get('incomeStatement', None)
+                if income_statement is not None:
+                    income_statement_df = pd.DataFrame(income_statement)
+                    st.table(income_statement_df)
+                else:
+                    st.write('Income Statement data not available')
+
+                # Display Balance Sheet as a table
+                st.write('Balance Sheet')
+                balance_sheet = financial_data.get('balanceSheet', None)
+                if balance_sheet is not None:
+                    balance_sheet_df = pd.DataFrame(balance_sheet)
+                    st.table(balance_sheet_df)
+                else:
+                    st.write('Balance Sheet data not available')
+
+                # Display Statement of Cash Flows as a table
+                st.write('Statement of Cash Flows')
+                cash_flows = financial_data.get('cashflowStatement', None)
+                if cash_flows is not None:
+                    cash_flows_df = pd.DataFrame(cash_flows)
+                    st.table(cash_flows_df)
+                else:
+                    st.write('Statement of Cash Flows data not available')
+
+            for ticker in ticker_list:
+                try:
+                    st.subheader(f'Financial Statements for {ticker}')
+                    financial_data = fetch_financial_data(ticker)
+                    plot_financial_statements(financial_data)
+                except Exception as e:
+                    st.error(f'Error fetching financial data for {ticker}: {e}')
 
         except Exception as e:
             st.error('Error in processing: \n' + str(e))
