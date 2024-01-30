@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-from pandas_datareader import data as web
+import yfinance as yf  # Import yfinance for fetching data
 from datetime import datetime
 import matplotlib.pyplot as plt
 from pypfopt.efficient_frontier import EfficientFrontier
@@ -36,14 +36,8 @@ if st.sidebar.button('Run Optimization'):
         st.error('The number of tickers and weights must be the same')
     else:
         try:
-            # Fetching stock data
-            df = pd.DataFrame()
-            for ticker in ticker_list:
-                try:
-                    df[ticker] = web.DataReader(ticker, data_source='yahoo', start=start_date, end=end_date)['Adj Close']
-                except Exception as e:
-                    st.error(f"Error fetching data for {ticker}: {e}")
-                    continue
+            # Fetching stock data using yfinance
+            df = yf.download(ticker_list, start=start_date, end=end_date)['Adj Close']
 
             # Expected returns and sample covariance
             mu = expected_returns.mean_historical_return(df)
@@ -67,4 +61,3 @@ if st.sidebar.button('Run Optimization'):
 
         except Exception as e:
             st.error('Error in processing: \n' + str(e))
-
