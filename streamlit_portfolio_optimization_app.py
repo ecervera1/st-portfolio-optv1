@@ -70,28 +70,28 @@ if st.sidebar.button('Run Optimization'):
             def plot_financial_statements(financial_data):
                 # Create a container for the financial statements
                 st.subheader('Financial Statements')
-
+                
                 # Display Income Statement as a table
                 st.write('Income Statement')
-                income_statement = financial_data.get('incomeStatement', None)
+                income_statement = financial_data.get('income_statement', None)  # Replace with actual data source key
                 if income_statement is not None:
                     income_statement_df = pd.DataFrame(income_statement)
                     st.table(income_statement_df)
                 else:
                     st.write('Income Statement data not available')
-
+            
                 # Display Balance Sheet as a table
                 st.write('Balance Sheet')
-                balance_sheet = financial_data.get('balanceSheet', None)
+                balance_sheet = financial_data.get('balance_sheet', None)  # Replace with actual data source key
                 if balance_sheet is not None:
                     balance_sheet_df = pd.DataFrame(balance_sheet)
                     st.table(balance_sheet_df)
                 else:
                     st.write('Balance Sheet data not available')
-
+            
                 # Display Statement of Cash Flows as a table
                 st.write('Statement of Cash Flows')
-                cash_flows = financial_data.get('cashflowStatement', None)
+                cash_flows = financial_data.get('cash_flows', None)  # Replace with actual data source key
                 if cash_flows is not None:
                     cash_flows_df = pd.DataFrame(cash_flows)
                     st.table(cash_flows_df)
