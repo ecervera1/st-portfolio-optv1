@@ -75,43 +75,26 @@ if st.sidebar.button('Run Optimization'):
                 except Exception as e:
                     return None
 
-            # Display financial statements using tabs
-            st.subheader('Financial Statements')
-            tabs = st.tabs()
+            # Select financial statement type using a dropdown
+            selected_statement = st.selectbox('Select Financial Statement Type:', ['Income Statement', 'Balance Sheet', 'Statement of Cash Flows'])
+
+            # Display financial statements for the selected type
             for ticker in ticker_list:
-                with tabs:
+                try:
                     st.subheader(f'Financial Statements for {ticker}')
                     financial_data = fetch_financial_data(ticker)
                     if financial_data is not None:
-                        # Create tabs for each financial statement
-                        income_tab, balance_tab, cash_flows_tab = st.columns(3)
-                        
-                        with income_tab:
-                            st.write('Income Statement')
-                            income_statement = financial_data.get('incomeStatement', None)
-                            if income_statement is not None:
-                                income_statement_df = pd.DataFrame(income_statement)
-                                st.table(income_statement_df)
-                            else:
-                                st.write('Income Statement data not available')
-
-                        with balance_tab:
-                            st.write('Balance Sheet')
-                            balance_sheet = financial_data.get('balanceSheet', None)
-                            if balance_sheet is not None:
-                                balance_sheet_df = pd.DataFrame(balance_sheet)
-                                st.table(balance_sheet_df)
-                            else:
-                                st.write('Balance Sheet data not available')
-
-                        with cash_flows_tab:
-                            st.write('Statement of Cash Flows')
-                            cash_flows = financial_data.get('cashflowStatement', None)
-                            if cash_flows is not None:
-                                cash_flows_df = pd.DataFrame(cash_flows)
-                                st.table(cash_flows_df)
-                            else:
-                                st.write('Statement of Cash Flows data not available')
+                        st.write(selected_statement)
+                        statement_data = financial_data.get(selected_statement.lower(), None)
+                        if statement_data is not None:
+                            statement_df = pd.DataFrame(statement_data)
+                            st.table(statement_df)
+                        else:
+                            st.write(f'{selected_statement} data not available for {ticker}')
+                    else:
+                        st.write(f'Financial data not available for {ticker}')
+                except Exception as e:
+                    st.error(f'Error fetching financial data for {ticker}: {e}')
 
         except Exception as e:
             st.error('Error in processing: \n' + str(e))
