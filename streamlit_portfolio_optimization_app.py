@@ -4,6 +4,10 @@ import numpy as np
 import yfinance as yf
 from datetime import datetime
 import matplotlib.pyplot as plt
+from pypfopt.efficient_frontier import EfficientFrontier  # Import EfficientFrontier
+from pypfopt import risk_models
+from pypfopt import expected_returns  # Import expected_returns
+import seaborn as sns
 
 # Set style for plots
 plt.style.use('fivethirtyeight')
