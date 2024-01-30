@@ -24,11 +24,16 @@ ticker_list = st.sidebar.text_area('Enter the ticker symbols (comma separated):'
 
 # Input for weights
 weights_str = st.sidebar.text_input('Enter the weights for each stock (comma separated):', '0.33, 0.33, 0.34')
-weights = np.array([float(w) for w in weights_str.split(',')])
+#weights = np.array([float(w) for w in weights_str.split(',')])
+weights = np.array([float(w.strip()) for w in weights_str.split(',')])
 
 # Date input
 start_date = st.sidebar.date_input('Start date', datetime(2020, 1, 1))
 end_date = st.sidebar.date_input('End date', datetime.today())
+
+
+
+
 
 # Button to run optimization
 if st.sidebar.button('Run Optimization'):
@@ -38,8 +43,15 @@ if st.sidebar.button('Run Optimization'):
         try:
             # Fetching stock data
             df = pd.DataFrame()
+            #for ticker in ticker_list:
+                #df[ticker] = web.DataReader(ticker.strip(), data_source='yahoo', start=start_date, end=end_date)['Adj Close']
+            #try:
             for ticker in ticker_list:
-                df[ticker] = web.DataReader(ticker.strip(), data_source='yahoo', start=start_date, end=end_date)['Adj Close']
+                df[ticker] = web.DataReader(ticker, data_source='yahoo', start=start_date, end=end_date)['Adj Close']
+        except Exception as e:
+            st.error(f"Error fetching data for {ticker}: {e}")
+            continue
+
 
             # Expected returns and sample covariance
             mu = expected_returns.mean_historical_return(df)
