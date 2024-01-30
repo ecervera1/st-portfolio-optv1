@@ -76,13 +76,18 @@ if st.sidebar.button('Run Optimization'):
                     return None
 
             # Function to plot financial statements as tabs
+            # Function to plot financial statements as tabs
             def plot_financial_statements_tabs(financial_data):
                 # Create a container for the financial statements
                 st.subheader('Financial Statements')
-                tabs = st.tabs()
-
+            
+                # Create tabs for each financial statement
+                income_tab = st.empty()
+                balance_tab = st.empty()
+                cash_flows_tab = st.empty()
+            
                 # Display Income Statement as a tab
-                with tabs[0]:
+                with income_tab:
                     st.write('Income Statement')
                     income_statement = financial_data.get('incomeStatement', None)
                     if income_statement is not None:
@@ -90,9 +95,9 @@ if st.sidebar.button('Run Optimization'):
                         st.table(income_statement_df)
                     else:
                         st.write('Income Statement data not available')
-
+            
                 # Display Balance Sheet as a tab
-                with tabs[1]:
+                with balance_tab:
                     st.write('Balance Sheet')
                     balance_sheet = financial_data.get('balanceSheet', None)
                     if balance_sheet is not None:
@@ -100,9 +105,9 @@ if st.sidebar.button('Run Optimization'):
                         st.table(balance_sheet_df)
                     else:
                         st.write('Balance Sheet data not available')
-
+            
                 # Display Statement of Cash Flows as a tab
-                with tabs[2]:
+                with cash_flows_tab:
                     st.write('Statement of Cash Flows')
                     cash_flows = financial_data.get('cashflowStatement', None)
                     if cash_flows is not None:
@@ -110,6 +115,7 @@ if st.sidebar.button('Run Optimization'):
                         st.table(cash_flows_df)
                     else:
                         st.write('Statement of Cash Flows data not available')
+            
 
             for ticker in ticker_list:
                 try:
