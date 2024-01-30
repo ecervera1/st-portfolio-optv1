@@ -62,9 +62,21 @@ if st.sidebar.button('Run Optimization'):
             st.sidebar.header('Financial Statement Analysis')
 
             # Function to fetch financial data for a stock
-            def fetch_financial_data(ticker):
-                financials = yf.Ticker(ticker).financials
-                return financials
+            def fetch_financial_data(ticker_symbol):
+                try:
+                    ticker = yf.Ticker(ticker_symbol)
+                    income_statement = ticker.financials  # Fetch income statement
+                    balance_sheet = ticker.balance_sheet  # Fetch balance sheet
+                    cash_flow = ticker.cashflow  # Fetch cash flow statement
+            
+                    financial_data = {
+                        'incomeStatement': income_statement,
+                        'balanceSheet': balance_sheet,
+                        'cashflowStatement': cash_flow
+                    }
+                    return financial_data
+                except Exception as e:
+                    return None
 
             # Function to plot financial statements as tables
             def plot_financial_statements(financial_data):
