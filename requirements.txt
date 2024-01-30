@@ -7,3 +7,4 @@ matplotlib
 PyPortfolioOpt
 scipy
 seaborn
+yfinance
